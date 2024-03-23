@@ -154,20 +154,3 @@ function incrementAge(arr) {
 incrementAge(testingArr)
 
 
-
-// Example of a function that takes a callback
-// function performOperation(callback) {
-//     // Simulating some asynchronous operation (e.g., fetching data from a server)
-//     setTimeout(function() {
-//         // After the operation is completed, we call the callback function
-//         callback();
-//     }, 2000); // Simulating a delay of 2 seconds
-// }
-
-// // Define a callback function
-// function callbackFunction() {
-//     console.log("Callback function executed!");
-// }
-
-// // Call the performOperation function and pass the callbackFunction as an argument
-// performOperation(callbackFunction);
