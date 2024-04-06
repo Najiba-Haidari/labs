@@ -1,16 +1,10 @@
-//const usernameRegex = /^[a-zA-Z0-9]+$/;
-//const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-//function addlisteners() {
-//document.getElementById("username").addEventListener("input", validateUserName);
-//var username = this.value.trim();
-
 const registrationForm = document.getElementById("registration");
 
 const username = document.getElementById("username");
 const email = document.getElementById("email")
 const password = document.getElementById("password")
 const passwordCheck = document.getElementById("passwordCheck")
-// const terms = registrationForm.elements["terms"];
+const terms = document.getElementById("terms")
 const errorDisplay = document.getElementById("errorDisplay");
 const successDisplay = document.getElementById("successDisplay");
 
@@ -36,6 +30,12 @@ const emailVal = validateEmail()
     event.returnValue= false;
     return false
   }
+  
+  const termsChecked = validateTerms();
+  if (termsChecked === false){
+    event.returnValue=false;
+    return false;
+  }
 
   // const passwordCheckVal = validatePasswordCheck()
   // if (passwordCheckVal === false){
@@ -47,6 +47,7 @@ const emailVal = validateEmail()
   email.value="";
   password.value="";
   passwordCheck.value="";
+  terms.checked = false;
 
 }
 
@@ -110,6 +111,17 @@ function validatePassword(){
 }
   return password.value;
 }
+
+function validateTerms(){
+  if (!terms.checked == true){
+    // console.log(terms.value)
+    displayError("Please check the terms!");
+    terms.focus();
+    return false;
+  }
+  return terms;
+}
+
 
 // function validatePasswordCheck(){
 //   let pattern = "^(?!.*password)$";
