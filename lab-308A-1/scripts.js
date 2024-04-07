@@ -33,17 +33,25 @@ const trampoline = (f, ...args) => {
   }
 
 
-let n= 50000;
-function flattenArray(n, a = 1){
+// let n= 50000;
+function flattenArray(array){
     // let a = 1;
-    if (n ==0){
-        return a;
-    }else{
-        return ()=>  flattenArray(n-1, n* a);
-    }
+function flattenRepeat(array, result){
+let result = [];
+for (const item of array){
+  if (Array.isArray(item)){
+    flattenRepeat(item, result)
+  }else{
+    result.push(item)
+  }
 }
-console.log("n", n)
-console.log("flatten", flattenArray(n));
+return result;
+}
+return trampoline(()=> flattenRepeat(arr))
+}
+// console.log("n", n)
+const nestedArray = [1, [2, [3, 4], 5], [6, [7, 8]]];
+console.log("flatten", flattenArray(nestedArray));
 
   /**
    * Now, we can call the factorial function with as high
