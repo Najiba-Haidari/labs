@@ -1,3 +1,4 @@
+//for registration form
 const registrationForm = document.getElementById("registration");
 
 const username = document.getElementById("username");
@@ -9,7 +10,14 @@ const errorDisplay = document.getElementById("errorDisplay");
 const successDisplay = document.getElementById("successDisplay");
 let users = [];
 
+//for login form
+const loginForm= document.getElementById("login");
+const loginUsername = document.getElementById("loginUsername");
+const loginPassword = document.getElementById("loginPassword");
+const loginCheckbox = document.getElementById("loginCheckbox");
+
 registrationForm.addEventListener("submit", validateRegistration);
+loginForm.addEventListener("submit", validateLogin);
 
 function validateRegistration(event){
   event.preventDefault();
@@ -42,7 +50,7 @@ const emailVal = validateEmail()
   const newUser = {
     username: username.value.toLowerCase(),
     email: email.value.toLowerCase(),
-    password: password.value.toLowerCase()
+    password: password.value
   }
   console.log("new user", newUser)
   users.push(newUser);
@@ -57,15 +65,17 @@ const emailVal = validateEmail()
   //   return false
   // }
   displaySucess("Registered Successfully");
+  resetRegForm();
+
+}
+// 
+function resetRegForm(){
   username.value="";
   email.value="";
   password.value="";
   passwordCheck.value="";
   terms.checked = false;
-
 }
-console.log(localStorage.getItem("users"))
-
 
 
 function validateUserName() {
@@ -160,7 +170,49 @@ function validateTerms(){
 //   return password.value;
 // }
 
+function validateLogin(event){
+  event.preventDefault();
+  const loginUsers = JSON.parse(localStorage.getItem("users")) || [];
+  console.log(loginUsers)
+  const foundUser = loginUsers.find((user) => user.username === loginUsername.value.toLowerCase())
 
+  if (!foundUser){
+    displayError("User Not Found");
+    loginUsername.focus();
+    // loginUsername.value=""
+  }
+
+  const foundPassword = loginUsers.find((user)=> user.password === loginPassword.value);
+  if (!foundPassword){
+    displayError("Password is not correct");
+    loginPassword.focus();
+  }
+
+  const loginCheckboxChecked = validateCheckboxLogin();
+  if (loginCheckboxChecked === false){
+    event.returnValue=false;
+    return false;
+  }
+
+  displaySucess("Logging in Successfully");
+  resetLoginForm();
+}
+
+function resetLoginForm(){
+  loginUsername.value="";
+  loginPassword.value="";
+  loginCheckbox.checked=false;
+}
+
+function validateCheckboxLogin(){
+  if (!loginCheckbox.checked == true){
+    // console.log(terms.value)
+    displayError("Please check to keep you logged in!");
+    loginCheckbox.focus();
+    return false;
+  }
+  return loginCheckbox;
+}
 
 function displayError(message) {
   errorDisplay.innerText = message;
