@@ -7,6 +7,7 @@ const passwordCheck = document.getElementById("passwordCheck")
 const terms = document.getElementById("terms")
 const errorDisplay = document.getElementById("errorDisplay");
 const successDisplay = document.getElementById("successDisplay");
+let users = [];
 
 registrationForm.addEventListener("submit", validateRegistration);
 
@@ -37,6 +38,19 @@ const emailVal = validateEmail()
     return false;
   }
 
+  //localstorage for array of users
+  const newUser = {
+    username: username.value.toLowerCase(),
+    email: email.value.toLowerCase(),
+    password: password.value.toLowerCase()
+  }
+  console.log("new user", newUser)
+  users.push(newUser);
+  console.log("users", users);
+
+  localStorage.setItem("users", JSON.stringify(users));
+  console.log(localStorage.setItem("users", JSON.stringify(users)))
+
   // const passwordCheckVal = validatePasswordCheck()
   // if (passwordCheckVal === false){
   //   event.returnValue= false;
@@ -50,6 +64,7 @@ const emailVal = validateEmail()
   terms.checked = false;
 
 }
+console.log(localStorage.getItem("users"))
 
 
 
@@ -81,7 +96,7 @@ function validateEmail(){
   let pattern = "^(?!.*@example\.com$)[a-zA-Z0-9. _-]+@[a-zA-Z0-9. -]+\.[a-zA-Z]{2,4}$";
   if (email.value === "") {
     displayError("Please add your email");
-    console.log("username");
+    // console.log("username");
     email.focus();
     return false;
   }
