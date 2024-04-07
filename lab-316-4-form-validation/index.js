@@ -39,6 +39,12 @@ const emailVal = validateEmail()
     event.returnValue= false;
     return false
   }
+
+  const passwordCheckVal = validatePasswordCheck()
+  if (passwordCheckVal === false){
+    event.returnValue= false;
+    return false
+  }
   
   const termsChecked = validateTerms();
   if (termsChecked === false){
@@ -48,27 +54,28 @@ const emailVal = validateEmail()
 
   //localstorage for array of users
   const newUser = {
-    username: username.value.toLowerCase(),
-    email: email.value.toLowerCase(),
+    username: username.value.trim().toLowerCase(),
+    email: email.value.trim().toLowerCase(),
     password: password.value
   }
+
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+
   console.log("new user", newUser)
   users.push(newUser);
   console.log("users", users);
 
   localStorage.setItem("users", JSON.stringify(users));
-  console.log(localStorage.setItem("users", JSON.stringify(users)))
+  // console.log(localStorage.setItem("users", JSON.stringify(users)))
 
-  // const passwordCheckVal = validatePasswordCheck()
-  // if (passwordCheckVal === false){
-  //   event.returnValue= false;
-  //   return false
-  // }
+
+
   displaySuccess("Registered Successfully");
   resetRegForm();
 
 }
-// 
+console.log(users)
+// reset the inputs in registration form
 function resetRegForm(){
   username.value="";
   email.value="";
@@ -119,21 +126,31 @@ return email.value;
 }
 
 function validatePassword(){
-  let pattern = "^(?!.*password)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+={}[\]:;\"'<>,.?/\\|-]).{12,}$";
+  let pattern = /^(?!.*password)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+={}[\]:;"'<>,.?/\\|-]).{12,}$/;
   if (password.value === "") {
     displayError("Please enter your password");
     password.focus();
     return false;
   }
- else if (password.value.match(pattern)){
+ else if (!password.value.match(pattern)){
     displayError("Please enter a valid password of 12 characters long with at least one number, and one lowercase and one uppercase letter");
     password.focus();
     return false;
-} else if (password.value !== passwordCheck.value){
-  displayError("Please re-enter your password");
+}
+  return password.value;
+}
+
+function validatePasswordCheck(){
+  if (passwordCheck.value === "") {
+    displayError("Please enter your password");
     passwordCheck.focus();
     return false;
-}
+  }
+  if (password.value !== passwordCheck.value){
+    displayError("Please re-enter your password");
+      passwordCheck.focus();
+      return false;
+  }
   return password.value;
 }
 
@@ -174,11 +191,17 @@ function validateLogin(event){
   event.preventDefault();
   const loginUsers = JSON.parse(localStorage.getItem("users")) || [];
   console.log(loginUsers)
-  const foundUser = loginUsers.find((user) => user.username === loginUsername.value.toLowerCase())
-
+    // Get the entered username 
+    const enteredUsername = loginUsername.value.trim().toLowerCase();
+  
+    // Find the user with the matching username
+    const foundUser = loginUsers.find(user => user.username === enteredUsername);
   if (!foundUser){
+    console.log(!foundUser)
+
     displayError("User Not Found");
     loginUsername.focus();
+    return false;
     // loginUsername.value=""
   }
 
@@ -186,6 +209,7 @@ function validateLogin(event){
   if (!foundPassword){
     displayError("Password is not correct");
     loginPassword.focus();
+    return false;
   }
 
   const loginCheckboxChecked = validateCheckboxLogin();
@@ -198,11 +222,6 @@ function validateLogin(event){
   resetLoginForm();
 }
 
-function resetLoginForm(){
-  loginUsername.value="";
-  loginPassword.value="";
-  loginCheckbox.checked=false;
-}
 
 function validateCheckboxLogin(){
   if (!loginCheckbox.checked == true){
@@ -213,6 +232,13 @@ function validateCheckboxLogin(){
   }
   return loginCheckbox;
 }
+
+function resetLoginForm(){
+  loginUsername.value="";
+  loginPassword.value="";
+  loginCheckbox.checked=false;
+}
+
 
 function displayError(message) {
   errorDisplay.innerText = message;
