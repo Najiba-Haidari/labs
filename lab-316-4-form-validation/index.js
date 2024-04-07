@@ -64,7 +64,7 @@ const emailVal = validateEmail()
   //   event.returnValue= false;
   //   return false
   // }
-  displaySucess("Registered Successfully");
+  displaySuccess("Registered Successfully");
   resetRegForm();
 
 }
@@ -194,7 +194,7 @@ function validateLogin(event){
     return false;
   }
 
-  displaySucess("Logging in Successfully");
+  displaySuccess("Logging in Successfully");
   resetLoginForm();
 }
 
@@ -224,7 +224,7 @@ function displayError(message) {
 }
 
 
-function displaySucess(message) {
+function displaySuccess(message) {
   successDisplay.innerText = message;
   successDisplay.style.display = "block";
   setTimeout(() => {
